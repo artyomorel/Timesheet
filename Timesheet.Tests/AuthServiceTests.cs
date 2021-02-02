@@ -1,5 +1,7 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
+using Timesheet.BussinessLogic.Exceptions;
 using Timesheet.BussinessLogic.Services;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
@@ -22,7 +24,7 @@ namespace Timesheet.Tests
             //arrange
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
             employeeRepositoryMock.
-                Setup(x => x.GetEmployee(It.Is<string>(y => y == lastName)))
+                Setup(x => x.Get(It.Is<string>(y => y == lastName)))
                 .Returns(() => new StaffEmployee(lastName, 70000))
                 .Verifiable();
 
@@ -35,9 +37,7 @@ namespace Timesheet.Tests
             employeeRepositoryMock.VerifyAll();
 
             Assert.False(string.IsNullOrWhiteSpace(result));
-            Assert.IsNotNull(UserSessions.Sessions);
-            Assert.IsNotEmpty(UserSessions.Sessions);
-            Assert.IsTrue(UserSessions.Sessions.Contains(lastName));
+            Assert.IsNotNull(result);
         }
 
         public void Login_InvokeLoginTwiceForOneLastName_ShouldReturnTrue()
@@ -46,7 +46,7 @@ namespace Timesheet.Tests
             string lastName = "Иванов";
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
             employeeRepositoryMock.
-                Setup(x => x.GetEmployee(It.Is<string>(y => y == lastName)))
+                Setup(x => x.Get(It.Is<string>(y => y == lastName)))
                 .Returns(() => new StaffEmployee(lastName, 70000))
                 .Verifiable();
 
@@ -61,9 +61,7 @@ namespace Timesheet.Tests
             employeeRepositoryMock.VerifyAll();
 
             Assert.False(string.IsNullOrWhiteSpace(result));
-            Assert.IsNotNull(UserSessions.Sessions);
-            Assert.IsNotEmpty(UserSessions.Sessions);
-            Assert.IsTrue(UserSessions.Sessions.Contains(lastName));
+            Assert.IsNotNull(result);
         }
 
         [TestCase(null)]
@@ -76,14 +74,11 @@ namespace Timesheet.Tests
             var service = new AuthService(employeeRepositoryMock.Object);
 
             //act
-            var result = service.Login(lastName);
+            
 
             //assert
-            employeeRepositoryMock.Verify(x => x.GetEmployee(lastName), Times.Never);
-
-            Assert.False(string.IsNullOrWhiteSpace(result));
-            Assert.IsEmpty(UserSessions.Sessions);
-            Assert.IsTrue(UserSessions.Sessions.Contains(lastName) == false);
+            Assert.Throws<ArgumentException>(()=>service.Login(lastName));
+            employeeRepositoryMock.Verify(x => x.Get(lastName), Times.Never);
         }
 
         [TestCase("TestUser")]
@@ -93,21 +88,18 @@ namespace Timesheet.Tests
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
 
             employeeRepositoryMock.
-                Setup(x => x.GetEmployee(It.Is<string>(y => y == lastName)))
+                Setup(x => x.Get(It.Is<string>(y => y == lastName)))
 
                 .Returns(() => null);
 
             var service = new AuthService(employeeRepositoryMock.Object);
 
             //act
-            var result = service.Login(lastName);
-
+            
             //assert
-
-            employeeRepositoryMock.Verify(x => x.GetEmployee(lastName), Times.Once);
-
-            Assert.False(string.IsNullOrWhiteSpace(result));
-            Assert.IsTrue(UserSessions.Sessions.Contains(lastName) == false);
+            Assert.Throws<NotFoundException>(()=>service.Login(lastName));
+            employeeRepositoryMock.Verify(x => x.Get(lastName), Times.Once);
+            
         }
 
         [Test]
