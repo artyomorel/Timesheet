@@ -19,7 +19,7 @@ namespace Timesheet.DataAccess.MSSQL
                 {
                     Id = 1,
                     LastName = "Иванов",
-                    Position = Position.Chef,
+                    Position = Position.Chief,
                     Salary = 200000m,
                     Bonus = 20000m,
                 },

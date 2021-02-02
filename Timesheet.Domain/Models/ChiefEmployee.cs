@@ -7,7 +7,7 @@ namespace Timesheet.Domain.Models
     [Serializable]
     public class ChiefEmployee : Employee
     {
-        public ChiefEmployee(string lastName, decimal salary, decimal bonus) : base(lastName, salary, Position.Chef)
+        public ChiefEmployee(string lastName, decimal salary, decimal bonus) : base(lastName, salary, Position.Chief)
         {
             Bonus = bonus;
         }

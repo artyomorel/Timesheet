@@ -2,7 +2,7 @@
 {
     public enum Position
     {
-        Chef,
+        Chief,
         Staff,
         Freelancer
     }

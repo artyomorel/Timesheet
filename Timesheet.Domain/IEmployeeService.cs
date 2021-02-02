@@ -4,6 +4,6 @@ namespace Timesheet.Domain
 {
     public interface IEmployeeService
     {
-        bool Add(Employee staffEmployee);
+        bool Add(Employee employee);
     }
 }

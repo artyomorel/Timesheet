@@ -37,7 +37,7 @@ namespace Timesheet.DataAccess.MSSQL.Repositories
 
             switch (employee.Position)
             {
-                case Position.Chef:
+                case Position.Chief:
                     return _mapper.Map<ChiefEmployee>(employee);
                 case Position.Staff:
                     return new StaffEmployee(employee.LastName, employee.Salary);
