@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
+using AutoMapper.Internal;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
 
@@ -22,6 +23,7 @@ namespace Timesheet.DataAccess.MSSQL.Repositories
             var timeLogs = _context.TimeLogs.Where(x => x.EmployeeId == employee.Id);
             
             var newTimeLogs = timeLogs.Select(x => _mapper.Map<TimeLog>(x)).ToArray();
+            newTimeLogs.ForAll(x=>x.LastName=lastName);
             
             return newTimeLogs;
         }
