@@ -32,7 +32,7 @@ namespace Timesheet.Api
             services.AddTransient<IValidator<CreateTimeLogRequest>, TimeLogFluentValidator>();
 
             services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<ITimesheetRepository, TimesheetRepository>();
+            services.AddTransient<ITimesheetRepository, DataAccess.MSSQL.Repositories.TimesheetRepository>();
             services.AddTransient<ITimeSheetService, TimesheetService>();
             services.AddTransient<IEmployeeRepository, DataAccess.MSSQL.Repositories.EmployeeRepository>();
             services.AddTransient<IEmployeeService, EmployeeService>();

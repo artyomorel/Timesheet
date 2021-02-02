@@ -15,8 +15,8 @@ namespace Timesheet.DataAccess.MSSQL
                 .IncludeBase<Employee, Entities.Employee>().ReverseMap();
             CreateMap<FreelancerEmployee, Entities.Employee>()
                 .IncludeBase<Employee, Entities.Employee>().ReverseMap();
-            
-            
+
+            CreateMap<TimeLog, Entities.TimeLog>().ReverseMap();
         }
     }
 }

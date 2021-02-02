@@ -20,7 +20,7 @@ namespace Timesheet.BussinessLogic.Services
         {
             var employee = _employeeRepository.Get(lastName);
             
-            bool isValid = employee != null ? employee.CheckInputLog(timeLog) : false;
+            bool isValid = employee?.CheckInputLog(timeLog) ?? false;
 
             if (!isValid)
             {

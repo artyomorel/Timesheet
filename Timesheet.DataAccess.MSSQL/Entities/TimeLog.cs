@@ -9,7 +9,8 @@ namespace Timesheet.DataAccess.MSSQL.Entities
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public int WorkingHours { get; set; }
-        public string LastName { get; set; }
         public string Comment { get; set; }
+        
+        public int EmployeeId { get; set; }
     }
 }
