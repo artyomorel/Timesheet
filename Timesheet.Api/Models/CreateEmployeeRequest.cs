@@ -16,7 +16,7 @@ namespace Timesheet.Api.Models
         {
             RuleFor(x => x.LastName).NotNull().NotEmpty();
             RuleFor(x => x.Salary).GreaterThan(0).NotEmpty().NotNull();
-            RuleFor(x => x.Bonus).GreaterThanOrEqualTo(0).NotEmpty().NotNull();
+            RuleFor(x => x.Bonus).GreaterThanOrEqualTo(0);
             RuleFor(x => x.Position).IsEnumName(typeof(Position)).WithMessage(x=> $"Not found position {x.Position}");
 
         }

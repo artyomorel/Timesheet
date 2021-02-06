@@ -19,34 +19,34 @@ namespace Timesheet.Tests
             var expectedLastName = "Иванов";
             var salary = 70000;
             decimal expectedTotal = 8750; // (8+8+4)/160 * 70000
-            var expectedTotalHours = 20m; 
-
+            var expectedTotalHours = 20m;
+            TimeLog[] expectedTimeLogs = new[]
+            {
+                new TimeLog
+                {
+                    LastName = expectedLastName,
+                    Date = DateTime.Now.AddDays(-2),
+                    WorkingHours = 8,
+                    Comment = Guid.NewGuid().ToString()
+                },
+                new TimeLog
+                {
+                    LastName = expectedLastName,
+                    Date = DateTime.Now.AddDays(-1),
+                    WorkingHours = 8,
+                    Comment = Guid.NewGuid().ToString()
+                },
+                new TimeLog
+                {
+                    LastName = expectedLastName,
+                    Date = DateTime.Now,
+                    WorkingHours = 4,
+                    Comment = Guid.NewGuid().ToString()
+                }
+            };
             timesheetRepositoryMock
                 .Setup(x => x.GetTimeLogs(It.Is<string>(y => y == expectedLastName)))
-                .Returns(() => new[]
-                {
-                    new TimeLog
-                    {
-                        LastName = expectedLastName,
-                        Date = DateTime.Now.AddDays(-2),
-                        WorkingHours = 8,
-                        Comment = Guid.NewGuid().ToString()
-                    },
-                    new TimeLog
-                    {
-                        LastName = expectedLastName,
-                        Date = DateTime.Now.AddDays(-1),
-                        WorkingHours = 8,
-                        Comment = Guid.NewGuid().ToString()
-                    },
-                    new TimeLog
-                    {
-                        LastName = expectedLastName,
-                        Date = DateTime.Now,
-                        WorkingHours = 4,
-                        Comment = Guid.NewGuid().ToString()
-                    }
-                })
+                .Returns(() => expectedTimeLogs)
                 .Verifiable();
 
             employeeRepositoryMock
@@ -67,7 +67,8 @@ namespace Timesheet.Tests
 
             Assert.IsNotNull(result.TimeLogs);
             Assert.IsNotEmpty(result.TimeLogs);
-
+            Assert.AreEqual(result.TimeLogs, expectedTimeLogs);
+    
             Assert.AreEqual(expectedTotal, result.Bill);
             Assert.AreEqual(expectedTotalHours, result.TotalHours);
         }

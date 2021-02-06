@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Timesheet.Api.Models;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
+using Position = Timesheet.Api.Models.Position;
 
 namespace Timesheet.Api.Controllers
 {
@@ -25,13 +26,13 @@ namespace Timesheet.Api.Controllers
         {
             if (ModelState.IsValid)
             {
-                switch (employeeRequest.Position.ToLower())
+                switch (employeeRequest.Position)
                 {
-                    case "chief":
+                    case nameof(Position.Chief):
                         return Ok(_employeeService.Add(_mapper.Map<ChiefEmployee>(employeeRequest)));
-                    case "freelancer":
+                    case nameof(Position.Freelancer):
                         return Ok(_employeeService.Add(_mapper.Map<FreelancerEmployee>(employeeRequest)));
-                    case "staff":
+                    case nameof(Position.Staff):
                         return Ok(_employeeService.Add(_mapper.Map<StaffEmployee>(employeeRequest)));
                 }
             }
