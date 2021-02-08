@@ -17,11 +17,20 @@ namespace Timesheet.DataAccess.MSSQL.Repositories
             _mapper = mapper;
         }
 
-        public void Add(TimeLog timeLog)
+        public bool Add(TimeLog timeLog)
         {
+            var totalHour = _context.TimeLogs
+                .Where(x => x.Date == timeLog.Date && x.LastName == timeLog.LastName)
+                .Sum(x=>x.WorkingHours);
+            if (totalHour >= 24)
+            {
+                return false;
+            }
             var timeLogEntity = _mapper.Map<Entities.TimeLog>(timeLog);
+            
             _context.TimeLogs.Add(timeLogEntity);
-            _context.SaveChanges(); 
+            _context.SaveChanges();
+            return true;
         }
 
         public void Update(TimeLog timeLog)

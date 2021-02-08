@@ -1,6 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using System;
+using Timesheet.BussinessLogic.Exceptions;
 using Timesheet.BussinessLogic.Services;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
@@ -47,7 +48,8 @@ namespace Timesheet.Tests
                 .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new StaffEmployee(expectedLastName, 0m))
                 .Verifiable();
-
+            _timesheetRepositoryMock
+                .Setup(x => x.Add(timeLog)).Returns(true);
             //act
             var result = _service.TrackTime(timeLog, timeLog.LastName);
 
@@ -76,7 +78,8 @@ namespace Timesheet.Tests
                 .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new ChiefEmployee(expectedLastName, 0m, 0m))
                 .Verifiable();
-
+            _timesheetRepositoryMock
+                .Setup(x => x.Add(timeLog)).Returns(true);
             //act
             var result = _service.TrackTime(timeLog, timeLog.LastName);
 
@@ -104,7 +107,6 @@ namespace Timesheet.Tests
                 .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new StaffEmployee(expectedLastName, 0m))
                 .Verifiable();
-
             //act
             var result = _service.TrackTime(timeLog, expectedLastName);
 
@@ -132,7 +134,9 @@ namespace Timesheet.Tests
                 .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new StaffEmployee(expectedLastName, 0m))
                 .Verifiable();
-
+            _timesheetRepositoryMock
+                .Setup(x => x.Add(timeLog)).Returns(true);
+            
             //act
             var result = _service.TrackTime(timeLog, timeLog.LastName);
 
@@ -197,7 +201,8 @@ namespace Timesheet.Tests
                 .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new FreelancerEmployee(expectedLastName, 0m))
                 .Verifiable();
-
+            _timesheetRepositoryMock
+                .Setup(x => x.Add(timeLog)).Returns(true);
             //act
             var result = _service.TrackTime(timeLog, expectedLastName);
 
@@ -239,6 +244,37 @@ namespace Timesheet.Tests
 
             _employeeRepositoryMock.VerifyAll();
             _timesheetRepositoryMock.Verify(x => x.Add(timeLog), Times.Never);
+        }
+        
+        [Test]
+        public void TrackTime_StaffEmployee_ShouldThrowTooManyHoursException()
+        {
+            //arrange
+            var expectedLastName = "TestUser";
+
+
+            var timeLog = new TimeLog
+            {
+                Date = DateTime.Now,
+                WorkingHours = 1,
+                LastName = expectedLastName,
+                Comment = Guid.NewGuid().ToString()
+            };
+
+            _employeeRepositoryMock
+                .Setup(x => x.Get(expectedLastName))
+                .Returns(() => new StaffEmployee(expectedLastName, 0m))
+                .Verifiable();
+            _timesheetRepositoryMock
+                .Setup(x => x.Add(timeLog)).Returns(false);
+            //act
+            bool result = true;
+
+            //assert
+            Assert.Throws<TooManyHoursException>(() => result = _service.TrackTime(timeLog, timeLog.LastName));
+            _employeeRepositoryMock.VerifyAll();
+            _timesheetRepositoryMock.Verify(x => x.Add(timeLog), Times.Once);
+            Assert.True(result);
         }
     }
 }

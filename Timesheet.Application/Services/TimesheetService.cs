@@ -1,4 +1,5 @@
 ﻿using System;
+using Timesheet.BussinessLogic.Exceptions;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
 using static Timesheet.BussinessLogic.Services.AuthService;
@@ -27,8 +28,12 @@ namespace Timesheet.BussinessLogic.Services
                 return false;
             }
             
-            _timesheetRepository.Add(timeLog);
+            var result = _timesheetRepository.Add(timeLog);
 
+            if (!result)
+            {
+                throw new TooManyHoursException($"Too many Hours for {timeLog.Date}");
+            }
             return true;
         }
     }

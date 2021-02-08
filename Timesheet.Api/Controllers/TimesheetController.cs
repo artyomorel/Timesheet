@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Timesheet.Api.Models;
+using Timesheet.BussinessLogic.Exceptions;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
 
@@ -25,17 +26,18 @@ namespace Timesheet.Api.Controllers
         [HttpPost]
         public ActionResult<bool> TrackTime(CreateTimeLogRequest request)
         {
-            var lastName = (string)HttpContext.Items["LastName"];
-
-            if (ModelState.IsValid)
+            try
             {
+                var lastName = (string)HttpContext.Items["LastName"];
                 var timeLog = _mapper.Map<TimeLog>(request);
-
                 var result = _timeSheetService.TrackTime(timeLog, lastName);
                 return Ok(result);
+                
             }
-
-            return BadRequest();
+            catch(TooManyHoursException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
