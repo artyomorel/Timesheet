@@ -6,5 +6,7 @@ namespace Timesheet.Domain
     {
         TimeLog[] GetTimeLogs(string lastName);
         void Add(TimeLog timeLog);
+        void Update(TimeLog timeLog);
+        TimeLog Get(int timeLogId);
     }
 }

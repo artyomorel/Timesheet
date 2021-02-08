@@ -22,10 +22,15 @@ namespace Timesheet.DataAccess.csv
         {
             var dataRow = $"{timeLog.Comment}{_delimeter}" +
                 $"{timeLog.Date}{_delimeter}" +
-                $"{timeLog.Name}{_delimeter}" +
+                $"{timeLog.LastName}{_delimeter}" +
                 $"{timeLog.WorkingHours}\n";
 
             File.AppendAllText(_path, dataRow);
+        }
+
+        public TimeLog Get(int timeLogId)
+        {
+            throw new NotImplementedException();
         }
 
         public TimeLog[] GetTimeLogs(string lastName)
@@ -45,7 +50,7 @@ namespace Timesheet.DataAccess.csv
 
                     timeLog.Comment = dataMembers[0];
                     timeLog.Date = DateTime.TryParse(dataMembers[1], out var date) ? date : new DateTime();
-                    timeLog.Name = dataMembers[2];
+                    timeLog.LastName = dataMembers[2];
                     timeLog.WorkingHours = int.TryParse(dataMembers[3], out var workingHours) ? workingHours : 0;
 
                     timeLogs.Add(timeLog);
@@ -53,6 +58,11 @@ namespace Timesheet.DataAccess.csv
             }
 
             return timeLogs.ToArray();
+        }
+
+        public void Update(TimeLog timeLog)
+        {
+            throw new NotImplementedException();
         }
     }
 }

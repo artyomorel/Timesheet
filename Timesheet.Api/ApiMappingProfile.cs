@@ -8,7 +8,7 @@ namespace Timesheet.Api
     {
         public ApiMappingProfile()
         {
-            CreateMap<CreateTimeLogRequest, TimeLog>()
+            CreateMap<CreateTimeLogRequest, TimeLog>();
             CreateMap<EmployeeReport, GetEmployeeReportResponse>();
             CreateMap<TimeLog, TimeLogDto>();
             CreateMap<Issue, IssueDto>();
