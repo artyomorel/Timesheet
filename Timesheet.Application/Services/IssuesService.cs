@@ -6,19 +6,16 @@ namespace Timesheet.BussinessLogic.Services
 {
     public class IssuesService : IIssuesService
     {
-        private readonly IEmployeeRepository _employeeRepository;
         private readonly IIssuesClient _client;
 
-        public IssuesService(IEmployeeRepository employeeRepository, 
-            IIssuesClient client)
+        public IssuesService(IIssuesClient client)
         {
-            _employeeRepository = employeeRepository;
             _client = client;
         }
 
-        public Issue[] Get()
+        public Issue[] Get(string managerLogin,string projectName)
         {
-            var issues = _client.Get("user login").Result;
+            var issues = _client.Get(managerLogin,projectName).Result;
             return issues;
         }
     }

@@ -7,6 +7,6 @@ namespace Timesheet.Domain
 {
     public interface IIssuesService
     {
-        Issue[] Get();
+        Issue[] Get(string managerLogin, string projectName);
     }
 }

@@ -21,12 +21,12 @@ namespace Timesheet.Integrations.GitHub
             _gitHubClient = client;
         }
 
-        public async Task<Domain.Models.Issue[]> Get(string login)
+        public async Task<Domain.Models.Issue[]> Get(string login,string projectName)
         {
             var projects = await _gitHubClient
                 .Repository
                 .Project
-                .GetAllForRepository(login, "project name");
+                .GetAllForRepository(login, projectName);
 
             var timesheetProject = projects.FirstOrDefault();
 
