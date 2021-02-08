@@ -21,8 +21,9 @@ namespace Timesheet.DataAccess.MSSQL.Repositories
         {
             var totalHour = _context.TimeLogs
                 .Where(x => x.Date == timeLog.Date && x.LastName == timeLog.LastName)
-                .Sum(x=>x.WorkingHours);
-            if (totalHour >= 24)
+                .Sum(x=>x.WorkingHours)
+                + timeLog.WorkingHours;
+            if (totalHour > 24)
             {
                 return false;
             }
