@@ -32,7 +32,8 @@ namespace Timesheet.Api
 
             services.AddTransient<IValidator<CreateTimeLogRequest>, TimeLogFluentValidator>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestFluentValidator>();
-
+            services.AddTransient<IValidator<CreateEmployerRequest>, EmployerRequestFluentValidator>();
+            
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<ITimesheetRepository, TimesheetRepository>();
             services.AddTransient<ITimeSheetService, TimesheetService>();

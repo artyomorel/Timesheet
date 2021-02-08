@@ -5,7 +5,6 @@ using Timesheet.BussinessLogic.Exceptions;
 using Timesheet.BussinessLogic.Services;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
-using static Timesheet.BussinessLogic.Services.AuthService;
 
 namespace Timesheet.Tests
 {

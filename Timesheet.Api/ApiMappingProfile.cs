@@ -12,6 +12,11 @@ namespace Timesheet.Api
             CreateMap<EmployeeReport, GetEmployeeReportResponse>();
             CreateMap<TimeLog, TimeLogDto>();
             CreateMap<Issue, IssueDto>();
+
+            CreateMap<CreateEmployerRequest, Employee>();
+            CreateMap<CreateEmployerRequest, ChiefEmployee>().IncludeBase<CreateEmployerRequest, Employee>();
+            CreateMap<CreateEmployerRequest, StaffEmployee>().IncludeBase<CreateEmployerRequest, Employee>();
+            CreateMap<CreateEmployerRequest, FreelancerEmployee>().IncludeBase<CreateEmployerRequest, Employee>();
         }
     }
 }
