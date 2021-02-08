@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Timesheet.Api.Models;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
 
@@ -14,15 +16,20 @@ namespace Timesheet.Api.Controllers
     public class ReportController : ControllerBase
     {
         private readonly IReportService _reportService;
-        public ReportController(IReportService reportService)
+        private readonly IMapper _mapper;
+
+        public ReportController(IReportService reportService, IMapper mapper)
         {
             _reportService = reportService;
+            _mapper = mapper;
         }
         
         [HttpGet]
-        public ActionResult<EmployeeReport> Report(string lastName)
+        public ActionResult<GetEmployeeReportResponse> Get(string lastName)
         {
-            return _reportService.GetEmployeeReport(lastName);
+            var result = _reportService.GetEmployeeReport(lastName);
+
+            return _mapper.Map<GetEmployeeReportResponse>(result);
         }
     }
 }
