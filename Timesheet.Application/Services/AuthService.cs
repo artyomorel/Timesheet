@@ -17,7 +17,7 @@ namespace Timesheet.BussinessLogic.Services
             _employeeRepository = employeeRepository;
         }
         
-        public string Login(string lastName)
+        public string Login(string lastName,string secret)
         {
             if (string.IsNullOrWhiteSpace(lastName))
             {
@@ -31,7 +31,7 @@ namespace Timesheet.BussinessLogic.Services
                 throw new NotFoundException($"Employee with last name {lastName}");
             }
 
-            var secret = "secret secret secret secret secret";
+          
             var token = GenerateToken(secret, employee);
 
             return token;
@@ -57,11 +57,6 @@ namespace Timesheet.BussinessLogic.Services
 
             return tokenHandler.WriteToken(token);
         }
-
-        public static class UserSessions
-        {
-
-            public static HashSet<string> Sessions { get; set; } = new HashSet<string>();
-        }
+     
     }
 }

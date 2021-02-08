@@ -46,7 +46,7 @@ namespace Timesheet.Api
 
             services.AddDbContext<TimesheetContext>(x => 
                 x.UseSqlServer(Configuration.GetConnectionString("TimesheetContext")));
-
+            services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
             services.AddControllers().AddFluentValidation();
             services.AddControllers().AddNewtonsoftJson();
         }

@@ -26,7 +26,6 @@ namespace Timesheet.Tests
         [SetUp]
         public void SetUp()
         {
-            UserSessions.Sessions.Clear();
         }
 
         [Test]
@@ -35,7 +34,6 @@ namespace Timesheet.Tests
             //arrange
             var expectedLastName = "TestUser";
 
-            UserSessions.Sessions.Add(expectedLastName);
 
             var timeLog = new TimeLog
             {
@@ -65,7 +63,6 @@ namespace Timesheet.Tests
             //arrange
             var expectedLastName = "TestUser";
 
-            UserSessions.Sessions.Add(expectedLastName);
 
             var timeLog = new TimeLog
             {
@@ -95,8 +92,6 @@ namespace Timesheet.Tests
             //arrange
             var expectedLastName = "TestUser";
 
-            UserSessions.Sessions.Add(expectedLastName);
-
             var timeLog = new TimeLog
             {
                 Date = DateTime.Now,
@@ -124,8 +119,6 @@ namespace Timesheet.Tests
         {
             //arrange
             var expectedLastName = "TestUser";
-
-            UserSessions.Sessions.Add(expectedLastName);
 
             var timeLog = new TimeLog
             {
@@ -191,7 +184,6 @@ namespace Timesheet.Tests
             //arrange
             var expectedLastName = "TestUser";
 
-            UserSessions.Sessions.Add(expectedLastName);
 
             var timeLog = new TimeLog
             {
@@ -225,7 +217,6 @@ namespace Timesheet.Tests
             //arrange
             var expectedLastName = "TestUser";
 
-            UserSessions.Sessions.Add(expectedLastName);
 
             var timeLog = new TimeLog
             {

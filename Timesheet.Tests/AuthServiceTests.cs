@@ -14,6 +14,7 @@ namespace Timesheet.Tests
         [SetUp]
         public void Setup()
         {
+
         }
 
         [TestCase("Иванов")]
@@ -27,11 +28,11 @@ namespace Timesheet.Tests
                 Setup(x => x.Get(It.Is<string>(y => y == lastName)))
                 .Returns(() => new StaffEmployee(lastName, 70000))
                 .Verifiable();
-
+            var secret = Guid.NewGuid().ToString();
             var service = new AuthService(employeeRepositoryMock.Object);
             //act
 
-            var result = service.Login(lastName);
+            var result = service.Login(lastName, secret);
 
             //assert
             employeeRepositoryMock.VerifyAll();
@@ -42,6 +43,7 @@ namespace Timesheet.Tests
         public void Login_InvokeLoginTwiceForOneLastName_ShouldReturnTrue()
         {
             //arrange
+            var secret = Guid.NewGuid().ToString();
             string lastName = "Иванов";
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
             employeeRepositoryMock.
@@ -53,8 +55,8 @@ namespace Timesheet.Tests
 
             //act
 
-            var result = service.Login(lastName);
-            result = service.Login(lastName);
+            var result = service.Login(lastName,secret);
+            result = service.Login(lastName,secret);
 
             //assert
             employeeRepositoryMock.VerifyAll();
@@ -68,14 +70,14 @@ namespace Timesheet.Tests
         {
             //arrange
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
-
+            var secret = Guid.NewGuid().ToString();
             var service = new AuthService(employeeRepositoryMock.Object);
 
             //act
             string result = null;
 
             //assert
-            Assert.Throws<ArgumentException>(() => service.Login(lastName));
+            Assert.Throws<ArgumentException>(() => service.Login(lastName,secret));
             employeeRepositoryMock.Verify(x => x.Get(lastName), Times.Never);
             Assert.IsNull(result);
 
@@ -85,6 +87,7 @@ namespace Timesheet.Tests
         public void Login_UserDoesntExist_ShouldThrowNotFoundException(string lastName)
         {
             //arrange
+            var secret = Guid.NewGuid().ToString();
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
 
             employeeRepositoryMock.
@@ -97,20 +100,9 @@ namespace Timesheet.Tests
             string result = null; 
 
             //assert
-            Assert.Throws<NotFoundException>(() => result = service.Login(lastName));
+            Assert.Throws<NotFoundException>(() => result = service.Login(lastName,secret));
             employeeRepositoryMock.Verify(x => x.Get(lastName), Times.Once);
             Assert.IsNull(result);
-        }
-
-        [Test]
-        public void Test()
-        {
-            var employeeRepositoryMock = new Mock<IEmployeeRepository>();
-            var service = new AuthService(employeeRepositoryMock.Object);
-
-            var employee = new ChiefEmployee("Иванов", 0, 0);
-
-            var token = AuthService.GenerateToken("secret secret secret secret secret", employee);
         }
     }
 }

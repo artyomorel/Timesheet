@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
@@ -12,15 +12,15 @@ namespace Timesheet.Api
     public class JwtAuthMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IOptions<JwtConfig> _jwtConfig;
 
-        public JwtAuthMiddleware(RequestDelegate next)
+        public JwtAuthMiddleware(RequestDelegate next, IOptions<JwtConfig> jwtConfig)
         {
             _next = next;
+            _jwtConfig = jwtConfig;
         }
 
-        /*
-         eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMYXN0TmFtZSI6IlRlc3RMYXN0TmFtZSIsIm5iZiI6MTYxMDg3ODc5OCwiZXhwIjoxNjEwODgyMzk4LCJpYXQiOjE2MTA4Nzg3OTgsImF1ZCI6IkNoaWVmIn0.JuxUXaY5_JK89aZlyCk2Etgd-7kyCTizKok-FTbsPdM
-         */
+
 
         public async Task Invoke(HttpContext context)
         {
@@ -29,7 +29,8 @@ namespace Timesheet.Api
 
             if (authHeader != null)
             {
-                var secret = "secret secret secret secret secret";
+
+                var secret = _jwtConfig.Value.Secret;
                 var key = Encoding.UTF8.GetBytes(secret);
 
                 var token = authHeader.Split(" ").Last();
