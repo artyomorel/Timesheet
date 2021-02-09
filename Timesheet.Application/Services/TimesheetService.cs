@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Timesheet.BussinessLogic.Exceptions;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
@@ -21,20 +21,24 @@ namespace Timesheet.BussinessLogic.Services
         {
             var employee = _employeeRepository.Get(lastName);
             
-            bool isValid = employee != null ? employee.CheckInputLog(timeLog) : false;
+            bool isValid = employee?.CheckInputLog(timeLog) ?? false;
 
             if (!isValid)
             {
                 return false;
             }
-            
-            var result = _timesheetRepository.Add(timeLog);
-
-            if (!result)
+            if (IsTooManyHours(timeLog))
             {
                 throw new TooManyHoursException($"Too many Hours for {timeLog.Date}");
             }
+            _timesheetRepository.Add(timeLog);
             return true;
+        }
+
+        private bool IsTooManyHours(TimeLog timeLog)
+        {
+            var totalHour = _timesheetRepository.GetTotalHourForDate(timeLog.LastName,timeLog.Date) + timeLog.WorkingHours;
+            return totalHour > 24;
         }
     }
 }
