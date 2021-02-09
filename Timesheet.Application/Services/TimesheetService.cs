@@ -21,19 +21,19 @@ namespace Timesheet.BussinessLogic.Services
         {
             var employee = _employeeRepository.Get(lastName);
             
-            bool isValid = employee != null ? employee.CheckInputLog(timeLog) : false;
+            bool isValid = employee?.CheckInputLog(timeLog) ?? false;
 
             if (!isValid)
             {
                 return false;
             }
-            
-            var result = _timesheetRepository.Add(timeLog);
 
-            if (!result)
+            var totalHour = _timesheetRepository.GetTotalHourForDate(lastName, timeLog.Date) + timeLog.WorkingHours;
+            if (totalHour > 24)
             {
                 throw new TooManyHoursException($"Too many Hours for {timeLog.Date}");
             }
+            _timesheetRepository.Add(timeLog);
             return true;
         }
     }

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Timesheet.Domain;
@@ -17,23 +18,21 @@ namespace Timesheet.DataAccess.MSSQL.Repositories
             _mapper = mapper;
         }
 
-        public bool Add(TimeLog timeLog)
+        public void Add(TimeLog timeLog)
         {
-            var totalHour = _context.TimeLogs
-                .Where(x => x.Date == timeLog.Date && x.LastName == timeLog.LastName)
-                .Sum(x=>x.WorkingHours)
-                + timeLog.WorkingHours;
-            if (totalHour > 24)
-            {
-                return false;
-            }
             var timeLogEntity = _mapper.Map<Entities.TimeLog>(timeLog);
-            
             _context.TimeLogs.Add(timeLogEntity);
             _context.SaveChanges();
-            return true;
         }
 
+        public int GetTotalHourForDate(string lastName,DateTime date)
+        {
+            var totalHour = _context.TimeLogs
+                .Where(x => x.Date == date && x.LastName == lastName)
+                .Sum(x => x.WorkingHours);
+            return totalHour;
+        }
+        
         public void Update(TimeLog timeLog)
         {
             var timeLogEntities = _mapper.Map<Entities.TimeLog>(timeLog);

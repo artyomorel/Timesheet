@@ -18,7 +18,7 @@ namespace Timesheet.DataAccess.csv
             _path = csvSettings.Path + "\\timesheet.csv";
         }
 
-        public bool Add(TimeLog timeLog)
+        public void Add(TimeLog timeLog)
         {
             var dataRow = $"{timeLog.Comment}{_delimeter}" +
                 $"{timeLog.Date}{_delimeter}" +
@@ -26,8 +26,13 @@ namespace Timesheet.DataAccess.csv
                 $"{timeLog.WorkingHours}\n";
 
             File.AppendAllText(_path, dataRow);
-            return true;
         }
+
+        public int GetTotalHourForDate(string lastName, DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public TimeLog Get(int timeLogId)
         {
